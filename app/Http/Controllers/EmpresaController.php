@@ -82,13 +82,11 @@ class EmpresaController extends Controller
                     'direccion' => 'sometimes|string|max:255',
                     'telefono'  => ['sometimes', 'string', 'regex:/^[0-9]+$/', 'max:11'],
                     'estado'    => 'sometimes|in:Activo,Inactivo',
-
                 ]
             );
 
             $empresa = $this->empresaService->actualizar($nit, $validated);
             return response()->json(['success' => true, 'data' => $empresa]);
-
         } catch (ValidationException $e) { //controlar errores de validacion.
             return response()->json([
                 'success' => false,
@@ -111,13 +109,10 @@ class EmpresaController extends Controller
                 ], 200
             );
         } catch (ModelNotFoundException $e) {
-            return response()->json(
-                [
-                    'success' => false,
-                    'message' => $e->getMessage()
-                ], 404
-            );
-        } catch (Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage() ], 404);
+        } /* catch (ValidationException $e) {
+            return response()->json(['success' => false, 'errors' => $e->errors()], 422);
+        } */ catch (Exception $e) {
             return $this->respuestaError($e);
         }
     }
