@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\EmpresaService;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Validation\ValidationException;
 use Exception;
 
 class EmpresaController extends Controller
@@ -16,7 +17,7 @@ class EmpresaController extends Controller
         $this->empresaService = $empresaService;
     }
 
-    public function index()
+    public function listarEmpresas()
     {
         try {
             return response()->json([
@@ -28,7 +29,7 @@ class EmpresaController extends Controller
         }
     }
 
-    public function show($nit)
+    public function consultarEmpresaPorNit($nit)
     {
         try {
             return response()->json([
@@ -47,7 +48,7 @@ class EmpresaController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function registrarEmpresa(Request $request)
     {
         try {
             $validated = $request->validate(
@@ -61,7 +62,7 @@ class EmpresaController extends Controller
 
             $empresa = $this->empresaService->crear($validated);
             return response()->json(['success' => true, 'data' => $empresa], 201);
-        } catch (\Illuminate\Validation\ValidationException $e) { //controlar errores de validacion.
+        } catch (ValidationException $e) { //controlar errores de validacion.
             return response()->json([
                 'success' => false,
                 'message' => 'Error de validación en los datos enviados.',
@@ -72,7 +73,7 @@ class EmpresaController extends Controller
         }
     }
 
-    public function update(Request $request, $nit)
+    public function actualizarEmpresa(Request $request, $nit)
     {
         try {
             $validated = $request->validate(
@@ -87,7 +88,7 @@ class EmpresaController extends Controller
             $empresa = $this->empresaService->actualizar($nit, $validated);
             return response()->json(['success' => true, 'data' => $empresa]);
 
-        } catch (\Illuminate\Validation\ValidationException $e) { //controlar errores de validacion.
+        } catch (ValidationException $e) { //controlar errores de validacion.
             return response()->json([
                 'success' => false,
                 'message' => 'Error de validación en los datos enviados.',
@@ -98,7 +99,7 @@ class EmpresaController extends Controller
         }
     }
 
-    public function destroy($nit)
+    public function eliminarEmpresa($nit)
     {
         try {
             $this->empresaService->eliminar($nit);
