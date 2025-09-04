@@ -56,7 +56,7 @@ class EmpresaController extends Controller
                     'nit'       => 'required|string|max:9|unique:empresas,nit',
                     'nombre'    => 'required|string|max:255',
                     'direccion' => 'required|string|max:255',
-                    'telefono'  => 'required|string|max:11',
+                    'telefono'  => ['required', 'string', 'regex:/^[0-9]+$/', 'max:11']
                 ]
             );
 
@@ -80,8 +80,9 @@ class EmpresaController extends Controller
                 [
                     'nombre'    => 'sometimes|string|max:255',
                     'direccion' => 'sometimes|string|max:255',
-                    'telefono'  => 'sometimes|string|max:11',
+                    'telefono'  => ['sometimes', 'string', 'regex:/^[0-9]+$/', 'max:11'],
                     'estado'    => 'sometimes|in:Activo,Inactivo',
+
                 ]
             );
 
